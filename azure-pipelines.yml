@@ -1,0 +1,20 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'curl --output $(System.DefaultWorkingDirectory)/testresult.xml "https://github.com/karinaSC/PEOPLE_BOT_PORT.git"'
+  env:
+    BUILD_ID: $(Build.BuildNumber)
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/testresult.xml'
+    mergeTestResults: true
+    failTaskOnFailedTests: true
